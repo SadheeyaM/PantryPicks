@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "cart_item", schema = "cart")
+@Table(name = "cart_item")
 @Entity
 public class CartItem {
     @Id
