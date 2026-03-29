@@ -1,0 +1,31 @@
+<single-spa-router>
+  <main class="main-container">
+    <route path="/homepage">
+      <application name="@sysco/product-mfe"></application>
+    </route>
+    <route path="/products">
+      <application name="@sysco/product-mfe"></application>
+    </route>
+    <route path="/category/:id">
+      <application name="@sysco/product-mfe"></application>
+    </route>
+    <route path="/cart">
+      <application name="@sysco/cart-mfe"></application>
+    </route>
+    <route path="/cart/:id">
+      <application name="@sysco/cart-mfe"></application>
+    </route>
+    <route path="/profile/supplier">
+      <application name="@sysco/profile-mfe"></application>
+    </route>
+    <route path="/profile/datasteward">
+      <application name="@sysco/profile-mfe"></application>
+    </route>
+    <route path="/profile">
+      <application name="@sysco/profile-mfe"></application>
+    </route>
+    <route default>
+      <application name="@sysco/product-mfe"></application>
+    </route>
+  </main>
+</single-spa-router>

@@ -1,0 +1,356 @@
+@import url("https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css");
+
+.steward-page {
+  min-height: calc(100vh - var(--header-height));
+  background: #ffffff;
+  font-family: var(--font-stack);
+  color: #1a1a1a;
+}
+
+.steward-layout {
+  width: 100%;
+  max-width: 1680px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 20px 20px 40px;
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  gap: 18px;
+}
+
+.steward-sidebar {
+  border: 1px solid #e6edf8;
+  border-radius: 12px;
+  background: #f8fbff;
+  padding: 14px;
+  height: fit-content;
+  position: sticky;
+  top: 24px;
+}
+
+.steward-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 6px 14px;
+  border-bottom: 1px solid #dbe4ee;
+}
+
+.steward-brand-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.steward-brand-title {
+  margin: 0;
+  font-size: 12px;
+  color: #3b68c4;
+  font-weight: 700;
+}
+
+.steward-brand-subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.steward-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.steward-nav-item {
+  border: 1px solid transparent;
+  background: transparent;
+  height: 40px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #2d5a8f;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+.steward-nav-item.active,
+.steward-nav-item:hover {
+  background: #e8eff8;
+  border-color: #c8d7f1;
+  color: #1f3454;
+}
+
+.steward-main {
+  border: 1px solid #edf2f7;
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.steward-topbar {
+  margin-bottom: 14px;
+}
+
+.steward-kicker {
+  margin: 0;
+  font-size: 12px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+.steward-topbar h1 {
+  margin: 4px 0 0;
+  font-size: 26px;
+  color: #0f172a;
+}
+
+.steward-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.steward-card {
+  border: 1px solid #dbe4ee;
+  border-radius: 10px;
+  background: #f9fbff;
+  padding: 14px;
+}
+
+.steward-card p {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.steward-card h3 {
+  margin: 6px 0 0;
+  color: #1f3454;
+  font-size: 28px;
+}
+
+.steward-list-shell,
+.steward-profile-card {
+  border: 1px solid #edf2f7;
+  border-radius: 10px;
+  padding: 14px;
+  background: #ffffff;
+}
+
+.steward-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.steward-panel-head h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #0f172a;
+}
+
+.steward-panel-head span {
+  font-size: 12px;
+  color: #2d5a8f;
+  font-weight: 700;
+}
+
+.steward-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.steward-row {
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  background: #ffffff;
+  text-align: left;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.steward-row:hover {
+  border-color: #cfe0fb;
+  background: #f9fbff;
+}
+
+.steward-row-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1f3454;
+}
+
+.steward-row-sub {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.steward-row-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #5b6b83;
+}
+
+.steward-badge {
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.steward-badge.ok {
+  color: #1f7a3f;
+  background: #ecfbf2;
+  border: 1px solid #cdeed9;
+}
+
+.steward-badge.warn {
+  color: #8a5a00;
+  background: #fff7e6;
+  border: 1px solid #f4ddab;
+}
+
+.steward-empty {
+  border: 1px dashed #cfd9ea;
+  border-radius: 8px;
+  background: #f9fbff;
+  color: #64748b;
+  padding: 16px;
+  font-size: 13px;
+}
+
+.steward-profile {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.steward-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.steward-grid > div {
+  border: 1px solid #d8e3f3;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 10px;
+}
+
+.steward-grid .full {
+  grid-column: 1 / -1;
+}
+
+.steward-grid label {
+  display: block;
+  margin: 0;
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.steward-grid p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.steward-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1200;
+}
+
+.steward-modal {
+  width: min(720px, 100%);
+  background: #f7f9fc;
+  border: 1px solid #dbe4ee;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.28);
+  padding: 16px;
+}
+
+.steward-close {
+  border: 1px solid #dbe4ee;
+  background: #ffffff;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  color: #2d5a8f;
+  cursor: pointer;
+}
+
+.steward-close i {
+  font-size: 20px;
+}
+
+.steward-actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.steward-btn {
+  border-radius: 8px;
+  height: 34px;
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.steward-btn.reject {
+  border: 1px solid #e9c6c6;
+  background: #fff5f5;
+  color: #a53939;
+}
+
+.steward-btn.approve {
+  border: 0;
+  background: #3b68c4;
+  color: #ffffff;
+}
+
+@media (max-width: 1060px) {
+  .steward-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .steward-sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 760px) {
+  .steward-layout {
+    padding: 14px 14px 28px;
+  }
+
+  .steward-summary,
+  .steward-grid {
+    grid-template-columns: 1fr;
+  }
+}
