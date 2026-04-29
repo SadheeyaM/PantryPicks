@@ -1,6 +1,7 @@
 package com.sysco.user.controller;
 
 import com.sysco.user.dto.error.ErrorDto;
+import com.sysco.user.dto.request.UserCreateRequestDto;
 import com.sysco.user.dto.request.UserFilterRequestDto;
 import com.sysco.user.dto.request.UserPatchRequestDto;
 import com.sysco.user.dto.response.ResponseObject;
@@ -31,6 +32,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class userController extends AbstractController{
 //    public final AbstractController abstractController ;
     public final UserService userService ;
+
+    @PostMapping
+    public ResponseEntity<ResponseObject> createUser(@RequestBody UserCreateRequestDto userCreateRequestDto) {
+        log.info("Creating user profile for email: {}", userCreateRequestDto.getUserEmail());
+        return sendCreatedResponse(userService.createUser(userCreateRequestDto));
+    }
 
     @GetMapping
     public ResponseEntity<ResponseObject> getAllUsers() {

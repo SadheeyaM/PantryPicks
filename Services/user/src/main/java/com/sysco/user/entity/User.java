@@ -20,7 +20,11 @@ public class User {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email must be valid")
+    @Column(unique = true)
     private String userEmail ;
+
+    @NotBlank(message = "Password hash is required")
+    private String passwordHash;
 
     @NotBlank(message = "First name is required")
     @Size(max = 50, message = "First name must not exceed 50 characters")
