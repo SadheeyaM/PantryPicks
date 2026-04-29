@@ -1,6 +1,24 @@
 const cartClient = require("../clients/cart");
 const productClient = require("../clients/product");
 
+const unwrapPayload = (payload) => {
+  if (payload && typeof payload === "object" && payload.data && typeof payload.data === "object") {
+    return payload.data;
+  }
+  return payload;
+};
+
+const normalizeProducts = (payload) => {
+  const unwrapped = unwrapPayload(payload);
+  if (Array.isArray(unwrapped)) {
+    return unwrapped;
+  }
+  if (unwrapped && Array.isArray(unwrapped.content)) {
+    return unwrapped.content;
+  }
+  return [];
+};
+
 exports.createCart = async (req, res) => {
   try {
     const cartData = req.body;
@@ -16,25 +34,32 @@ exports.getCartById = async (req, res) => {
   try {
     const { id } = req.params;
     const cartResponse = await cartClient.getCartById(id);
-    const cart = cartResponse.data.data;
+    const cart = unwrapPayload(cartResponse.data);
+
+    if (!cart || typeof cart !== "object") {
+      return res.status(502).json({ message: "Invalid cart response from service" });
+    }
 
     // Enrich cart items with product details
     if (cart.items && Array.isArray(cart.items)) {
-      const enrichedItems = await Promise.all(
-        cart.items.map(async (item) => {
-          try {
-            const productResponse = await productClient.getProductById(item.productId);
-            return {
-              ...item,
-              productName: productResponse.data.data.productName,
-              productDescription: productResponse.data.data.productDescription,
-            };
-          } catch (err) {
-            console.error(`Failed to fetch product ${item.productId}:`, err.message);
-            return { ...item, productName: "Unknown", productDescription: "N/A" };
-          }
-        })
-      );
+      let productMap = new Map();
+      try {
+        const productsResponse = await productClient.getProducts();
+        const products = normalizeProducts(productsResponse.data);
+        productMap = new Map(products.map((product) => [String(product.productId), product]));
+      } catch (err) {
+        console.error("Failed to fetch product catalog for cart enrichment:", err.message);
+      }
+
+      const enrichedItems = cart.items.map((item) => {
+        const product = productMap.get(String(item.productId));
+        return {
+          ...item,
+          productName: product?.productName || "Unknown",
+          productDescription: product?.productDescription || "N/A",
+        };
+      });
+
       cart.items = enrichedItems;
     }
 

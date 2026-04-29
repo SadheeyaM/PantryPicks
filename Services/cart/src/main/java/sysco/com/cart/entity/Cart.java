@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @Data
-@Table(name = "cart", schema = "cart")
+@Table(name = "carts")
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,7 +22,9 @@ public class Cart {
     private Integer cartId ;
     private Integer userId ;
 
-    @OneToMany(mappedBy = "cartId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cartId",
+           cascade = CascadeType.ALL,
+           orphanRemoval = true)
     private List<CartItem> items ;
     private Float subTotal ;
     private Float shippingCost ;

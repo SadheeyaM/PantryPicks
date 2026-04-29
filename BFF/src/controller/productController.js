@@ -5,34 +5,38 @@ const e = require("cors");
 
 exports.getProductsWithCategory = async (req, res) => {
   try {
-    console.log('Fetching products and categories...');
     const [productsResponse, categoriesResponse] = await Promise.all([
       productClient.getProducts(),
       categoryClient.getCategories(),
     ]);
-    console.log('Products response:', productsResponse.data);
-    console.log('Categories response:', categoriesResponse.data);
-    const products = productsResponse.data.data;  // inner data
-    const categories = categoriesResponse.data.data;  // inner data
-    console.log('Products array:', products);
-    console.log('Categories array:', categories);
+
+    const productsPayload = productsResponse.data?.data;
+    const products = Array.isArray(productsPayload?.content)
+      ? productsPayload.content
+      : Array.isArray(productsPayload)
+        ? productsPayload
+        : [];
+
+    const categoriesPayload = categoriesResponse.data?.data;
+    const categories = Array.isArray(categoriesPayload) ? categoriesPayload : [];
+
     const productsWithCategory = products.map((product) => {
-      const category = categories.find((cat) => cat.id === product.categoryId);
-      console.log(`Product ${product.productId} categoryId: ${product.categoryId}, found category:`, category);
+      const category = categories.find(
+        (cat) => cat.categoryId === product.categoryId
+      );
+
       return {
         ...product,
-        categoryName: category ? category.name : "Unknown",
+        categoryName: category ? category.categoryName : "Unknown",
       };
     });
+
     res.json(productsWithCategory);
   } catch (error) {
-    console.error('Error in getProductsWithCategory:', error.message, error.response?.data);
-    res.status(500).json({
-      message: "Error while fetching products with category",
-    });
+    console.error("Error in getProductsWithCategory:", error.message, error.response?.data);
+    res.status(500).json({ message: "Error while fetching products with category" });
   }
 };
-
 exports.getProducts = async (req, res) => {
   try {
     const response = await productClient.getProducts() ;    
@@ -108,4 +112,3 @@ exports.updateProduct = async (req, res) => {
 //     }) ;
 //     } 
 // };
-
