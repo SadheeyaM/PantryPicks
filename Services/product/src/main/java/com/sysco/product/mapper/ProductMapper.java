@@ -17,9 +17,13 @@ public class ProductMapper {
         responseDto.setMessage(message);
         responseDto.setProductId(String.valueOf(product.getProductId()));
         responseDto.setCategoryId(product.getCategoryId());
+        responseDto.setSupplierId(product.getSupplierId());
         responseDto.setProductName(product.getProductName());
         responseDto.setProductDescription(product.getProductDescription());
         responseDto.setProductQuantity(product.getProductQuantity());
+        responseDto.setPrice(product.getPrice());
+        responseDto.setProductStatus(product.getProductStatus());
+        responseDto.setUnitOfSelling(product.getUnitOfSelling());
         responseDto.setProductUrl(product.getProductUrl());
         responseDto.setCreatedAt(product.getCreatedAt());
         responseDto.setUpdatedAt(product.getUpdateAt());
@@ -33,9 +37,13 @@ public class ProductMapper {
 
         productResponseDto.setProductId(product.getProductId());
         productResponseDto.setCategoryId(product.getCategoryId());
+        productResponseDto.setSupplierId(product.getSupplierId());
         productResponseDto.setProductName(product.getProductName());
         productResponseDto.setProductDescription(product.getProductDescription());
         productResponseDto.setProductQuantity(product.getProductQuantity());
+        productResponseDto.setPrice(product.getPrice());
+        productResponseDto.setProductStatus(product.getProductStatus());
+        productResponseDto.setUnitOfSelling(product.getUnitOfSelling());
         productResponseDto.setProductUrl(product.getProductUrl());
         productResponseDto.setCreatedAt(product.getCreatedAt());
         productResponseDto.setUpdatedAt(product.getUpdateAt());
@@ -53,8 +61,12 @@ public class ProductMapper {
         Product product = new Product();
         product.setProductName(productRequestDto.getProductName());
         product.setCategoryId(productRequestDto.getCategoryId());
+        product.setSupplierId(productRequestDto.getSupplierId());
         product.setProductDescription(productRequestDto.getProductDescription());
         product.setProductQuantity(productRequestDto.getProductQuantity());
+        product.setPrice(productRequestDto.getPrice());
+        product.setProductStatus(productRequestDto.getProductStatus());
+        product.setUnitOfSelling(productRequestDto.getUnitOfSelling());
         product.setProductUrl(productRequestDto.getProductUrl());
         product.setCreatedAt(LocalDateTime.now());
         product.setUpdateAt(LocalDateTime.now());
