@@ -18,5 +18,5 @@ exports.createCategory = (categoryData) => {
 }
 
 exports.updateCategory = (id, categoryData) => {
-  return categoryApi.put(`/category/${id}`, categoryData) ;
+  return categoryApi.patch(`/category/${id}`, categoryData) ;
 }

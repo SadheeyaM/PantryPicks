@@ -18,5 +18,5 @@ exports.createProduct = (productData) => {
 }
 
 exports.updateProduct = (id, productData) => {
-  return productApi.put(`/products/${id}`, productData) ;
+  return productApi.patch(`/products/${id}`, productData) ;
 }

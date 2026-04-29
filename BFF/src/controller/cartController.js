@@ -1,5 +1,6 @@
 const cartClient = require("../clients/cart");
 const productClient = require("../clients/product");
+const { createImageReadUrl } = require("../services/uploadService");
 
 const unwrapPayload = (payload) => {
   if (payload && typeof payload === "object" && payload.data && typeof payload.data === "object") {
@@ -51,14 +52,29 @@ exports.getCartById = async (req, res) => {
         console.error("Failed to fetch product catalog for cart enrichment:", err.message);
       }
 
-      const enrichedItems = cart.items.map((item) => {
-        const product = productMap.get(String(item.productId));
-        return {
-          ...item,
-          productName: product?.productName || "Unknown",
-          productDescription: product?.productDescription || "N/A",
-        };
-      });
+      const enrichedItems = await Promise.all(
+        cart.items.map(async (item) => {
+          const product = productMap.get(String(item.productId));
+          let productUrl = product?.productUrl || "";
+
+          if (productUrl) {
+            try {
+              const signedUrl = await createImageReadUrl({ fileUrl: productUrl });
+              productUrl = signedUrl || productUrl;
+            } catch (_) {
+              // Keep original URL if signing fails.
+            }
+          }
+
+          return {
+            ...item,
+            productName: product?.productName || "Unknown",
+            productDescription: product?.productDescription || "N/A",
+            productUrl,
+            price: Number(product?.price || 0),
+          };
+        })
+      );
 
       cart.items = enrichedItems;
     }
@@ -72,7 +88,12 @@ exports.getCartById = async (req, res) => {
 
 exports.getAllCarts = async (req, res) => {
   try {
-    const response = await cartClient.getAllCarts();
+    const { userId, status } = req.query;
+    const queryParams = {};
+    if (userId !== undefined) queryParams.userId = userId;
+    if (status !== undefined) queryParams.status = status;
+
+    const response = await cartClient.getAllCarts(queryParams);
     res.json(response.data);
   } catch (error) {
     console.error('Error fetching carts:', error.message);
