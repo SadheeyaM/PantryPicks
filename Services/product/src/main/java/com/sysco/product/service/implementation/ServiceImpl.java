@@ -95,6 +95,30 @@ public class ServiceImpl implements ProductService {
             product.setCategoryId(productPatchRequestDto.getCategoryId());
         }
 
+        if(productPatchRequestDto.getSupplierId() != null) {
+            product.setSupplierId(productPatchRequestDto.getSupplierId());
+        }
+
+        if(productPatchRequestDto.getProductQuantity() != null) {
+            product.setProductQuantity(productPatchRequestDto.getProductQuantity());
+        }
+
+        if(productPatchRequestDto.getPrice() != null) {
+            product.setPrice(productPatchRequestDto.getPrice());
+        }
+
+        if(productPatchRequestDto.getProductStatus() != null) {
+            product.setProductStatus(productPatchRequestDto.getProductStatus());
+        }
+
+        if(productPatchRequestDto.getUnitOfSelling() != null) {
+            product.setUnitOfSelling(productPatchRequestDto.getUnitOfSelling());
+        }
+
+        if(productPatchRequestDto.getProductUrl() != null) {
+            product.setProductUrl(productPatchRequestDto.getProductUrl());
+        }
+
         product.setUpdateAt(LocalDateTime.now());
 
         try {
