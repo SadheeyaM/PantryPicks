@@ -6,11 +6,13 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import sysco.com.cart.dto.request.CartItemPatchRequestDto;
 import sysco.com.cart.dto.request.CartItemRequestDto;
+import sysco.com.cart.dto.request.CartPatchRequestDto;
 import sysco.com.cart.dto.request.CartRequestDto;
 import sysco.com.cart.dto.response.CartCreateResponseDto;
 import sysco.com.cart.dto.response.CartResponseDto;
 import sysco.com.cart.entity.Cart;
 import sysco.com.cart.entity.CartItem;
+import sysco.com.cart.entity.CartStatus;
 import sysco.com.cart.exception.CartCreationException;
 import sysco.com.cart.exception.CartNotFoundException;
 import sysco.com.cart.repository.CartRepository;
@@ -82,8 +84,20 @@ public class ServiceImpl implements CartService {
     }
 
     @Override
-    public List<CartResponseDto> getAllCarts() {
-        return mapToCartResponseList(cartRepository.findAll());
+    public List<CartResponseDto> getAllCarts(Integer userId, CartStatus status) {
+        List<Cart> carts;
+
+        if (userId != null && status != null) {
+            carts = cartRepository.findByUserIdAndStatus(userId, status);
+        } else if (userId != null) {
+            carts = cartRepository.findByUserId(userId);
+        } else if (status != null) {
+            carts = cartRepository.findByStatus(status);
+        } else {
+            carts = cartRepository.findAll();
+        }
+
+        return mapToCartResponseList(carts);
     }
 
     @Override
@@ -111,6 +125,36 @@ public class ServiceImpl implements CartService {
 
         CartResponseDto response = mapCartResponseDto(savedCart);
         response.setMessage("Cart item updated successfully.");
+        return response;
+    }
+
+    @Override
+    @Transactional
+    public CartResponseDto updateCart(Integer cartId, CartPatchRequestDto cartPatchRequestDto) {
+        Cart cart = findCartOrThrow(cartId);
+
+        if (cartPatchRequestDto.getStatus() != null) {
+            cart.setStatus(cartPatchRequestDto.getStatus());
+        }
+
+        if (cartPatchRequestDto.getSubTotal() != null) {
+            cart.setSubTotal(cartPatchRequestDto.getSubTotal());
+        }
+
+        if (cartPatchRequestDto.getShippingCost() != null) {
+            cart.setShippingCost(cartPatchRequestDto.getShippingCost());
+        }
+
+        if (cartPatchRequestDto.getDiscount() != null) {
+            cart.setDiscount(cartPatchRequestDto.getDiscount());
+        }
+
+        cart.setUpdatedAt(LocalDateTime.now());
+
+        Cart savedCart = cartRepository.save(cart);
+
+        CartResponseDto response = mapCartResponseDto(savedCart);
+        response.setMessage("Cart updated successfully.");
         return response;
     }
 

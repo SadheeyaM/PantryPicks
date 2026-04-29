@@ -7,9 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sysco.com.cart.dto.request.CartItemPatchRequestDto;
 import sysco.com.cart.dto.request.CartItemRequestDto;
+import sysco.com.cart.dto.request.CartPatchRequestDto;
 import sysco.com.cart.dto.request.CartRequestDto;
 import sysco.com.cart.dto.response.CartResponseDto;
 import sysco.com.cart.dto.response.ResponseObject;
+import sysco.com.cart.entity.CartStatus;
 import sysco.com.cart.service.CartService;
 
 @Log4j2
@@ -27,15 +29,27 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseObject> getAllCarts() {
-        log.info("Fetching all cart details");
-        return abstractController.sendSuccessResponse(cartService.getAllCarts()) ;
+    public ResponseEntity<ResponseObject> getAllCarts(
+            @RequestParam(value = "userId", required = false) Integer userId,
+            @RequestParam(value = "status", required = false) CartStatus status
+    ) {
+        log.info("Fetching cart details with filters userId={}, status={}", userId, status);
+        return abstractController.sendSuccessResponse(cartService.getAllCarts(userId, status)) ;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getCartById(@PathVariable("id") Integer cartId) {
         log.info("Fetching details of card: {}", cartId);
         return abstractController.sendSuccessResponse(cartService.getCartById(cartId)) ;
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResponseObject> updateCartDetails(
+            @PathVariable("id") Integer cartId,
+            @RequestBody CartPatchRequestDto cartPatchRequestDto
+    ) {
+        log.info("Updating cart details of cart id: {}", cartId);
+        return abstractController.sendSuccessResponse(cartService.updateCart(cartId, cartPatchRequestDto));
     }
 
     @PostMapping("/{cartId}/items")
