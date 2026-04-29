@@ -13,8 +13,8 @@ exports.getCartById = (cartId) => {
   return cartApi.get(`/carts/${cartId}`);
 };
 
-exports.getAllCarts = () => {
-  return cartApi.get("/carts");
+exports.getAllCarts = (queryParams = {}) => {
+  return cartApi.get("/carts", { params: queryParams });
 };
 
 exports.addItemToCart = (cartId, itemData) => {
@@ -27,4 +27,8 @@ exports.removeItemFromCart = (cartId, cartItemId) => {
 
 exports.updateCartItem = (cartId, cartItemId, itemData) => {
   return cartApi.patch(`/carts/${cartId}/items/${cartItemId}`, itemData);
+};
+
+exports.updateCart = (cartId, cartData) => {
+  return cartApi.patch(`/carts/${cartId}`, cartData);
 };

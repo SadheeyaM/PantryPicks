@@ -15,6 +15,10 @@ exports.getOrders = async () => {
   return userApi.get("/orders") ;
 }   
 
+exports.getOrdersByCustomerId = (customerId) => {
+  return userApi.get(`/orders/customer/${customerId}`) ;
+}
+
 exports.getOrderById = (id) => {
   return userApi.get(`/orders/${id}`) ;
 }  

@@ -1,7 +1,40 @@
 const productClient = require("../clients/product") ;
 const categoryClient = require("../clients/category") ;
+const { createImageReadUrl } = require("../services/uploadService");
 
-const e = require("cors");
+const unwrap = (payload) => payload?.data?.data ?? payload?.data ?? payload;
+
+const unwrapNestedData = (payload) => {
+  let current = unwrap(payload);
+
+  while (
+    current &&
+    typeof current === "object" &&
+    !Array.isArray(current) &&
+    current.data &&
+    !current.productId
+  ) {
+    current = current.data;
+  }
+
+  return current;
+};
+
+const withSignedProductImage = async (product) => {
+  if (!product?.productUrl) {
+    return product;
+  }
+
+  try {
+    const signedImageUrl = await createImageReadUrl({ fileUrl: product.productUrl });
+    return {
+      ...product,
+      productUrl: signedImageUrl || product.productUrl,
+    };
+  } catch (_) {
+    return product;
+  }
+};
 
 exports.getProductsWithCategory = async (req, res) => {
   try {
@@ -10,26 +43,28 @@ exports.getProductsWithCategory = async (req, res) => {
       categoryClient.getCategories(),
     ]);
 
-    const productsPayload = productsResponse.data?.data;
+    const productsPayload = unwrap(productsResponse);
     const products = Array.isArray(productsPayload?.content)
       ? productsPayload.content
       : Array.isArray(productsPayload)
         ? productsPayload
         : [];
 
-    const categoriesPayload = categoriesResponse.data?.data;
+    const categoriesPayload = unwrap(categoriesResponse);
     const categories = Array.isArray(categoriesPayload) ? categoriesPayload : [];
 
-    const productsWithCategory = products.map((product) => {
+    const productsWithCategory = await Promise.all(products.map(async (product) => {
       const category = categories.find(
         (cat) => cat.categoryId === product.categoryId
       );
 
+      const productWithImage = await withSignedProductImage(product);
+
       return {
-        ...product,
+        ...productWithImage,
         categoryName: category ? category.categoryName : "Unknown",
       };
-    });
+    }));
 
     res.json(productsWithCategory);
   } catch (error) {
@@ -52,7 +87,12 @@ exports.getProductById = async (req, res) => {
   try {
     const { id } = req.params;
     const productResponse = await productClient.getProductById(id) ;
-    const product = productResponse.data ;
+    const productPayload = unwrapNestedData(productResponse);
+    const product = Array.isArray(productPayload?.content)
+      ? productPayload.content[0]
+      : Array.isArray(productPayload)
+        ? productPayload[0]
+        : productPayload;
 
     if (!product) {
       return res.status(404).json({
@@ -61,12 +101,15 @@ exports.getProductById = async (req, res) => {
     }
 
     const categoriesResponse = await categoryClient.getCategories();
-    const categories = categoriesResponse.data ;
-    const category = categories.find((cat) => cat.id === product.categoryId) ;
+    const categoriesPayload = unwrap(categoriesResponse);
+    const categories = Array.isArray(categoriesPayload) ? categoriesPayload : [];
+    const category = categories.find((cat) => Number(cat.categoryId) === Number(product.categoryId)) ;
+
+    const productWithImage = await withSignedProductImage(product);
 
     res.json({
-      ...product,
-      categoryName: category ? category.name : "Unknown",
+      ...productWithImage,
+      categoryName: category ? category.categoryName : "Unknown",
     });
   } catch (error) {
     res.status(500).json({
@@ -95,9 +138,18 @@ exports.updateProduct = async (req, res) => {
         res.json(response.data);
     }
     catch (error) {
-        res.status(500).json({
-            message: "Error while updating product",
-        }) ;
+    const status = error?.response?.status || 500;
+    const downstream = error?.response?.data;
+    const message =
+      downstream?.message ||
+      downstream?.details?.message ||
+      error?.message ||
+      "Error while updating product";
+
+    res.status(status).json({
+      message,
+      details: downstream || null,
+    }) ;
     } 
 } ;
 
