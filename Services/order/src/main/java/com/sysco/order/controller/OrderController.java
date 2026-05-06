@@ -29,6 +29,12 @@ public class OrderController extends AbstractController {
         return sendSuccessResponse(orderService.getAllOrders()) ;
     }
 
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<ResponseObject> getOrdersByCustomerId(@PathVariable Integer customerId) {
+        log.info("Fetching orders for customer id: {}", customerId);
+        return sendSuccessResponse(orderService.getOrdersByCustomerId(customerId));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getOrderById(@PathVariable Integer orderId) {
         log.info("Getting Order details of Order ID: {}", orderId);

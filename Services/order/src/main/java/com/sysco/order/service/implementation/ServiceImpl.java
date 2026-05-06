@@ -49,6 +49,19 @@ public class ServiceImpl implements OrderService {
     }
 
     @Override
+    public ResponseObject getOrdersByCustomerId(Integer customerId) {
+        List<OrderResponseDto> orders = orderRepository.findByCustomerIdOrderByOrderDateDesc(customerId)
+                .stream()
+                .map(OrderMapper::mapToOrderResponse)
+                .toList();
+
+        return ResponseObject.builder()
+                .object(orders)
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @Override
     public ResponseObject getOrderById(Integer orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(()-> new OrderNotFoundException("Order with id "+ orderId + " not found"));
