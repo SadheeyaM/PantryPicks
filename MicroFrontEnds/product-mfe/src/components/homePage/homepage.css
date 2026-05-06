@@ -148,6 +148,16 @@
   font-size: 24px;
 }
 
+.category-load-state {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: #7a7a7a;
+}
+
+.category-load-state.error {
+  color: #a53939;
+}
+
 .section-link {
   color: var(--color-primary);
   text-decoration: none;
@@ -221,6 +231,13 @@
   align-items: center;
   justify-content: center;
   transition: all 0.28s ease;
+}
+
+.category-card-image {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  display: block;
 }
 
 .category-card:hover .category-icon-wrap {

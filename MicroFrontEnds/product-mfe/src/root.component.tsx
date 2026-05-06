@@ -1,51 +1,20 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../shared-mfe/src/components/Header";
-import Footer from "../../shared-mfe/src/components/Footer";
 import "../../shared-mfe/src/styles/global.css";
 import HomePage from "./components/homePage/homepage";
 import CategoryItemsPage from "./components/categoryItems/categoryItems";
 import ItemPage from "./components/itemPage/itemPage";
 
-export default function Root(props) {
+const Header = require("../../shared-mfe/src/components/Header").default;
+const Footer = require("../../shared-mfe/src/components/Footer").default;
+
+export default function Root(_props: unknown) {
   const [currentPage, setCurrentPage] = useState<"home" | "category" | "item">("home");
   const [selectedCategory, setSelectedCategory] = useState("Vegetables");
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
 
   useEffect(() => {
-    const categoryIdMap: Record<string, string> = {
-      "1": "Vegetables",
-      "2": "Fruits",
-      "3": "Dairy",
-      "4": "Oils",
-      "5": "Pulses",
-      "6": "Bread",
-    };
-
-    const syncPageWithLocation = () => {
-      const pathname = window.location.pathname.toLowerCase();
+    const syncPageWithHash = () => {
       const hash = window.location.hash.replace("#", "").trim();
-
-      // Support sample URL endpoints such as /homepage and /category/1.
-      if (pathname === "/homepage") {
-        setCurrentPage("home");
-        return;
-      }
-
-      if (pathname.startsWith("/category/")) {
-        const categoryId = pathname.split("/")[2] || "1";
-        setSelectedCategory(categoryIdMap[categoryId] || "Vegetables");
-        setCurrentPage("category");
-        return;
-      }
-
-      if (pathname.startsWith("/product/")) {
-        const productId = Number(pathname.split("/")[2]);
-        if (!Number.isNaN(productId) && productId > 0) {
-          setSelectedProductId(productId);
-          setCurrentPage("item");
-          return;
-        }
-      }
 
       if (hash.startsWith("category/")) {
         const categoryFromHash = decodeURIComponent(hash.split("/")[1] || "Vegetables");
@@ -66,13 +35,11 @@ export default function Root(props) {
       setCurrentPage("home");
     };
 
-    syncPageWithLocation();
-    window.addEventListener("hashchange", syncPageWithLocation);
-    window.addEventListener("popstate", syncPageWithLocation);
+    syncPageWithHash();
+    window.addEventListener("hashchange", syncPageWithHash);
 
     return () => {
-      window.removeEventListener("hashchange", syncPageWithLocation);
-      window.removeEventListener("popstate", syncPageWithLocation);
+      window.removeEventListener("hashchange", syncPageWithHash);
     };
   }, []);
 
