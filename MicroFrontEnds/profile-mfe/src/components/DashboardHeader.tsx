@@ -4,10 +4,25 @@ import "./dashboard-header.css";
 
 type DashboardHeaderProps = {
   role: "supplier" | "datasteward";
+  currentUser?: {
+    userEmail?: string;
+    userFistName?: string;
+    userLastName?: string;
+    userStatus?: string;
+  } | null;
+  profileLoading?: boolean;
+  profileError?: string | null;
 };
 
-export default function DashboardHeader({ role }: DashboardHeaderProps) {
+export default function DashboardHeader({ role, currentUser, profileLoading, profileError }: DashboardHeaderProps) {
   const roleLabel = role === "datasteward" ? "Data Steward" : "Supplier";
+  const displayName = [currentUser?.userFistName, currentUser?.userLastName].filter(Boolean).join(" ") || currentUser?.userEmail || "Account";
+
+  const handleSignOut = () => {
+    window.localStorage.removeItem("accessToken");
+    window.localStorage.removeItem("refreshToken");
+    window.location.href = "/products";
+  };
 
   return (
     <header className="dashboard-header" role="banner">
@@ -28,24 +43,11 @@ export default function DashboardHeader({ role }: DashboardHeaderProps) {
         </button>
 
         <div className="dashboard-header-actions">
-          {/* <button
-            type="button"
-            className="dashboard-link-btn"
-            onClick={() => {
-              window.location.href = "/products";
-            }}
-          >
-            Storefront
-          </button>
-          <button
-            type="button"
-            className="dashboard-link-btn"
-            onClick={() => {
-              window.location.href = "/cart";
-            }}
-          >
-            Cart
-          </button> */}
+          <div className="dashboard-profile-pill">
+            <span className="dashboard-profile-name">{displayName}</span>
+            <span className="dashboard-profile-role">{roleLabel}</span>
+          </div>
+          <button type="button" className="dashboard-link-btn" onClick={handleSignOut}>Sign Out</button>
         </div>
       </div>
     </header>

@@ -49,7 +49,187 @@
   <noscript>
     You need to enable JavaScript to run this app.
   </noscript>
+  <style>
+    .auth-shell { min-height: 100vh; display: grid; place-items: center; background: linear-gradient(135deg, #f7fafc, #e2e8f0); font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; }
+    .auth-card { width: min(420px, 92vw); background: #ffffff; border-radius: 16px; box-shadow: 0 24px 48px rgba(15, 23, 42, 0.12); padding: 24px; }
+    .auth-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+    .auth-tab { flex: 1; border: 1px solid #cbd5e1; background: #f8fafc; color: #0f172a; border-radius: 10px; padding: 10px; cursor: pointer; }
+    .auth-tab.active { background: #0f172a; color: #ffffff; border-color: #0f172a; }
+    .auth-card h1 { margin: 0 0 8px; font-size: 1.4rem; }
+    .auth-sub { margin: 0 0 16px; color: #475569; font-size: 0.92rem; }
+    .auth-field { display: grid; gap: 6px; margin-bottom: 10px; }
+    .auth-field label { font-size: 0.86rem; color: #334155; }
+    .auth-field input, .auth-field select { border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-size: 0.95rem; }
+    .auth-action { width: 100%; border: none; background: #2563eb; color: #fff; border-radius: 10px; padding: 11px; margin-top: 10px; cursor: pointer; }
+    .auth-status { margin-top: 12px; font-size: 0.88rem; color: #0f172a; }
+    .auth-status.error { color: #b91c1c; }
+  </style>
   <main></main>
+  <script>
+    (function () {
+      const parseJwt = (token) => {
+        try {
+          const payload = token.split(".")[1];
+          if (!payload) return null;
+          const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
+          const json = decodeURIComponent(
+            atob(normalized)
+              .split("")
+              .map((char) => `%${(`00${char.charCodeAt(0).toString(16)}`).slice(-2)}`)
+              .join("")
+          );
+          return JSON.parse(json);
+        } catch (_error) {
+          return null;
+        }
+      };
+
+      const resolveRedirectPath = (token) => {
+        const role = String(parseJwt(token)?.role || "").toUpperCase();
+        if (role === "SUPPLIER") {
+          return "/profile/supplier";
+        }
+        if (role === "DATA_STEWARD" || role === "DATASTEWARD") {
+          return "/profile/datasteward";
+        }
+        return "/products";
+      };
+
+      const token = window.localStorage.getItem("accessToken");
+      const currentPath = window.location.pathname;
+
+      if (!token && currentPath !== "/auth") {
+        window.location.replace("/auth");
+        return;
+      }
+
+      if (token && currentPath === "/auth") {
+        window.location.replace(resolveRedirectPath(token));
+        return;
+      }
+
+      if (currentPath === "/auth") {
+        const root = document.querySelector("main");
+        root.innerHTML = `
+          <section class="auth-shell">
+            <article class="auth-card">
+              <div class="auth-tabs">
+                <button id="tab-login" class="auth-tab active" type="button">Login</button>
+                <button id="tab-signup" class="auth-tab" type="button">Sign up</button>
+              </div>
+              <h1 id="auth-title">Welcome back</h1>
+              <p class="auth-sub">Sign in to continue to PantryPicks.</p>
+              <form id="auth-form">
+                <div class="auth-field">
+                  <label for="email">Email</label>
+                  <input id="email" type="email" required />
+                </div>
+                <div class="auth-field">
+                  <label for="password">Password</label>
+                  <input id="password" type="password" required />
+                </div>
+                <div id="signup-extra" style="display:none;">
+                  <div class="auth-field"><label for="firstName">First name</label><input id="firstName" type="text" /></div>
+                  <div class="auth-field"><label for="lastName">Last name</label><input id="lastName" type="text" /></div>
+                  <div class="auth-field"><label for="phone">Phone number</label><input id="phone" type="text" placeholder="+1234567890" /></div>
+                  <div class="auth-field"><label for="role">Role</label>
+                    <select id="role">
+                      <option value="USER">User</option>
+                      <option value="SUPPLIER">Supplier</option>
+                      <option value="DATA_STEWARD">Data Steward</option>
+                    </select>
+                  </div>
+                </div>
+                <button class="auth-action" type="submit" id="auth-submit">Login</button>
+                <p id="auth-status" class="auth-status"></p>
+              </form>
+            </article>
+          </section>
+        `;
+
+        const BFF_BASE = "http://localhost:3000";
+        let mode = "login";
+        const tabLogin = document.getElementById("tab-login");
+        const tabSignup = document.getElementById("tab-signup");
+        const title = document.getElementById("auth-title");
+        const submit = document.getElementById("auth-submit");
+        const extra = document.getElementById("signup-extra");
+        const form = document.getElementById("auth-form");
+        const status = document.getElementById("auth-status");
+        const requestedMode = new URLSearchParams(window.location.search).get("mode");
+
+        const setMode = (nextMode) => {
+          mode = nextMode;
+          const signup = mode === "signup";
+          tabLogin.classList.toggle("active", !signup);
+          tabSignup.classList.toggle("active", signup);
+          title.textContent = signup ? "Create account" : "Welcome back";
+          submit.textContent = signup ? "Sign up" : "Login";
+          extra.style.display = signup ? "block" : "none";
+          status.textContent = "";
+          status.classList.remove("error");
+        };
+
+        tabLogin.addEventListener("click", () => setMode("login"));
+        tabSignup.addEventListener("click", () => setMode("signup"));
+
+        if (requestedMode === "signup") {
+          setMode("signup");
+        }
+
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          status.textContent = "Please wait...";
+          status.classList.remove("error");
+
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          try {
+            if (mode === "signup") {
+              const signupPayload = {
+                userEmail: email,
+                password,
+                userFistName: document.getElementById("firstName").value,
+                userLastName: document.getElementById("lastName").value,
+                userPhoneNumber: document.getElementById("phone").value,
+                userRole: document.getElementById("role").value,
+              };
+
+              const signupResponse = await fetch(`${BFF_BASE}/api/v1/auth/signup`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(signupPayload),
+              });
+
+              if (!signupResponse.ok) {
+                const failure = await signupResponse.json();
+                throw new Error(failure.message || "Sign up failed");
+              }
+            }
+
+            const loginResponse = await fetch(`${BFF_BASE}/api/v1/auth/login`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ userEmail: email, password }),
+            });
+
+            if (!loginResponse.ok) {
+              const failure = await loginResponse.json();
+              throw new Error(failure.message || "Login failed");
+            }
+
+            const loginData = await loginResponse.json();
+            window.localStorage.setItem("accessToken", loginData.accessToken);
+            window.location.replace(resolveRedirectPath(loginData.accessToken));
+          } catch (error) {
+            status.textContent = error.message || "Authentication failed";
+            status.classList.add("error");
+          }
+        });
+      }
+    })();
+  </script>
   <script>
     window.importMapInjector.initPromise.then(() => {
       import('@sysco/root-config');

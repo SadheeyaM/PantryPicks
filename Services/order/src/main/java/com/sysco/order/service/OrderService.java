@@ -13,6 +13,8 @@ public interface OrderService {
 
     List<OrderResponseDto> getAllOrders() ;
 
+    ResponseObject getOrdersByCustomerId(Integer customerId) ;
+
     ResponseObject getOrderById(Integer orderId) ;
 
     ResponseObject updateOrder(Integer orderId, OrderPatchRequestDto orderPatchRequestDto) ;

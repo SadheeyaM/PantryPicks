@@ -8,8 +8,14 @@ const lifecycles = singleSpaReact({
   ReactDOMClient,
   rootComponent: Root,
   errorBoundary(err, info, props) {
-    // Customize the root error boundary for your microfrontend here.
-    return null;
+    console.error("[Profile MFE Error]", err, info);
+    return (
+      <div style={{ padding: "20px", color: "red", fontSize: "14px" }}>
+        <h3>Profile MFE Error</h3>
+        <pre>{err?.toString()}</pre>
+        <pre>{info?.componentStack}</pre>
+      </div>
+    );
   },
 });
 
