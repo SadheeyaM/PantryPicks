@@ -7,6 +7,30 @@ export default function Header() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef(null);
 
+  const parseJwt = (token) => {
+    try {
+      const payload = token.split(".")[1];
+      if (!payload) return null;
+      const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
+      const json = decodeURIComponent(
+        atob(normalized)
+          .split("")
+          .map((char) => `%${(`00${char.charCodeAt(0).toString(16)}`).slice(-2)}`)
+          .join("")
+      );
+      return JSON.parse(json);
+    } catch (_error) {
+      return null;
+    }
+  };
+
+  const accessToken = window.localStorage.getItem("accessToken");
+  const tokenPayload = accessToken ? parseJwt(accessToken) : null;
+  const normalizedRole = String(tokenPayload?.role || "").toUpperCase();
+  const isAuthenticated = Boolean(accessToken);
+  const isSupplier = normalizedRole === "SUPPLIER";
+  const isDataSteward = normalizedRole === "DATA_STEWARD" || normalizedRole === "DATASTEWARD";
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
@@ -60,29 +84,64 @@ export default function Header() {
 
           {isProfileOpen && (
             <div className="profile-dropdown">
-              <button
-                type="button"
-                className="dropdown-item"
-                onClick={() => {
-                  window.location.href = "/profile";
-                  setIsProfileOpen(false);
-                }}
-              >
-                <i className="bx bx-user-circle"></i>
-                View Profile
-              </button>
-              <button
-                type="button"
-                className="dropdown-item"
-                onClick={() => {
-                  // Add sign out logic here
-                  console.log("Sign out");
-                  setIsProfileOpen(false);
-                }}
-              >
-                <i className="bx bx-log-out"></i>
-                Sign Out
-              </button>
+              {!isAuthenticated ? (
+                <>
+                  <button
+                    type="button"
+                    className="dropdown-item"
+                    onClick={() => {
+                      window.location.href = "/auth";
+                      setIsProfileOpen(false);
+                    }}
+                  >
+                    <i className="bx bx-log-in"></i>
+                    Login
+                  </button>
+                  <button
+                    type="button"
+                    className="dropdown-item"
+                    onClick={() => {
+                      window.location.href = "/auth?mode=signup";
+                      setIsProfileOpen(false);
+                    }}
+                  >
+                    <i className="bx bx-user-plus"></i>
+                    Sign Up
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    className="dropdown-item"
+                    onClick={() => {
+                      if (isSupplier) {
+                        window.location.href = "/profile/supplier";
+                      } else if (isDataSteward) {
+                        window.location.href = "/profile/datasteward";
+                      } else {
+                        window.location.href = "/profile";
+                      }
+                      setIsProfileOpen(false);
+                    }}
+                  >
+                    <i className="bx bx-user-circle"></i>
+                    {isSupplier || isDataSteward ? "View Dashboard" : "View Profile"}
+                  </button>
+                  <button
+                    type="button"
+                    className="dropdown-item"
+                    onClick={() => {
+                      window.localStorage.removeItem("accessToken");
+                      window.location.href = "/auth";
+                      setIsProfileOpen(false);
+                    }}
+                  >
+                    <i className="bx bx-log-out"></i>
+                    Sign Out
+                  </button>
+                </>
+              )}
             </div>
           )}
         </div>

@@ -133,6 +133,144 @@
   font-size: 28px;
 }
 
+.steward-overview {
+  display: grid;
+  gap: 14px;
+}
+
+.steward-kpi-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.steward-kpi-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.steward-kpi-icon i {
+  font-size: 20px;
+}
+
+.steward-kpi-icon.shell {
+  color: #1f3454;
+  background: #eaf0f8;
+  border: 1px solid #d6e1ee;
+}
+
+.steward-kpi-icon.ok {
+  color: #1f7a3f;
+  background: #ecfbf2;
+  border: 1px solid #cdeed9;
+}
+
+.steward-kpi-icon.warn {
+  color: #8a5a00;
+  background: #fff7e6;
+  border: 1px solid #f4ddab;
+}
+
+.steward-kpi-icon.brand {
+  color: #234c95;
+  background: #edf3ff;
+  border: 1px solid #d8e3fa;
+}
+
+.steward-overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.steward-status-dot.ok {
+  background: #1f7a3f;
+}
+
+.steward-status-dot.warn {
+  background: #c27a00;
+}
+
+.steward-status-dot.reject {
+  background: #c94848;
+}
+
+.steward-status-dot.neutral {
+  background: #65809f;
+}
+
+.steward-status-legend {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.steward-status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #edf2f7;
+  background: #fbfdff;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.steward-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.steward-status-item p {
+  margin: 0;
+  font-size: 12px;
+  color: #5b6b83;
+}
+
+.steward-status-item strong {
+  margin-left: auto;
+  color: #0f172a;
+  font-size: 13px;
+}
+
+.steward-mini-chart {
+  display: grid;
+  gap: 10px;
+}
+
+.steward-mini-row {
+  display: grid;
+  grid-template-columns: minmax(90px, 1fr) auto auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.steward-simple-row {
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #ffffff;
+}
+
+.steward-mini-row p {
+  margin: 0;
+  font-size: 12px;
+  color: #334155;
+  font-weight: 600;
+}
+
+.steward-mini-row strong {
+  font-size: 12px;
+  color: #0f172a;
+}
+
 .steward-list-shell,
 .steward-profile-card {
   border: 1px solid #edf2f7;
@@ -147,6 +285,10 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
+}
+
+.steward-panel-head-wrap {
+  align-items: flex-start;
 }
 
 .steward-panel-head h2 {
@@ -205,6 +347,12 @@
   color: #5b6b83;
 }
 
+.steward-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .steward-badge {
   border-radius: 999px;
   padding: 4px 8px;
@@ -224,6 +372,254 @@
   border: 1px solid #f4ddab;
 }
 
+.steward-badge.reject {
+  color: #a53939;
+  background: #fff1f1;
+  border: 1px solid #e9c6c6;
+}
+
+.steward-products-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.steward-products-container {
+  border: 1px solid #edf2f7;
+  border-radius: 10px;
+  padding: 14px;
+  background: #ffffff;
+}
+
+.steward-filters-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 14px;
+  background: #f9fbff;
+  border: 1px solid #dbe4ee;
+  border-radius: 8px;
+}
+
+.steward-filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 160px;
+}
+
+.steward-filter-label {
+  margin: 0;
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.steward-filter-dropdown {
+  border: 1px solid #dbe4ee;
+  border-radius: 6px;
+  background: #ffffff;
+  height: 34px;
+  padding: 0 10px;
+  font-size: 13px;
+  color: #1a1a1a;
+  font-family: var(--font-stack);
+}
+
+.steward-filter-dropdown:focus {
+  outline: none;
+  border-color: #3b68c4;
+  box-shadow: 0 0 0 3px rgba(59, 104, 196, 0.1);
+}
+
+.steward-products-table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+
+.steward-products-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.steward-products-table thead {
+  background: #f9fbff;
+  border-bottom: 2px solid #dbe4ee;
+}
+
+.steward-products-table th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 700;
+  color: #2d5a8f;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 11px;
+}
+
+.steward-products-table tbody tr {
+  border-bottom: 1px solid #edf2f7;
+  transition: background 0.2s ease;
+}
+
+.steward-products-table tbody tr:hover {
+  background: #f9fbff;
+}
+
+.steward-products-table td {
+  padding: 12px;
+  color: #1a1a1a;
+}
+
+.steward-table-product-cell {
+  min-width: 260px;
+}
+
+.steward-table-product-button {
+  border: none;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.steward-table-image-wrap {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #dbe4ee;
+  border-radius: 6px;
+  background: #f9fbff;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.steward-table-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.steward-table-image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #edf2f7;
+}
+
+.steward-table-product-name {
+  margin: 0;
+  font-size: 13px;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.steward-table-product-sku {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.steward-table-category,
+.steward-table-supplier,
+.steward-table-price {
+  color: #1f3454;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.steward-table-status {
+  min-width: 130px;
+}
+
+.steward-status-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.steward-status-icon-btn {
+  width: 26px;
+  height: 26px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.steward-status-icon-btn i {
+  font-size: 15px;
+}
+
+.steward-status-icon-btn.approve {
+  border-color: #3b68c4;
+  background: #3b68c4;
+  color: #ffffff;
+}
+
+.steward-status-icon-btn.reject {
+  border-color: #c8d7f1;
+  background: #eef4ff;
+  color: #1f3454;
+}
+
+.steward-status-icon-btn.approve:hover {
+  background: #3158aa;
+  border-color: #3158aa;
+}
+
+.steward-status-icon-btn.reject:hover {
+  background: #dfe9fb;
+  border-color: #adc3eb;
+}
+
+.steward-table-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px;
+  background: #f9fbff;
+  border: 1px solid #dbe4ee;
+  border-radius: 8px;
+}
+
+.steward-pagination-arrow,
+.steward-pagination-number {
+  border: 1px solid #dbe4ee;
+  background: #ffffff;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  color: #2d5a8f;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.steward-pagination-arrow:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.steward-pagination-number.active {
+  background: #3b68c4;
+  border-color: #3b68c4;
+  color: #ffffff;
+}
+
+.steward-pagination-numbers {
+  display: flex;
+  gap: 4px;
+}
+
 .steward-empty {
   border: 1px dashed #cfd9ea;
   border-radius: 8px;
@@ -236,6 +632,120 @@
 .steward-profile {
   display: grid;
   grid-template-columns: 1fr;
+}
+
+.steward-categories {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.steward-category-table .steward-table-product-cell {
+  min-width: 220px;
+}
+
+.steward-category-button {
+  width: 100%;
+}
+
+.steward-form {
+  display: grid;
+  gap: 12px;
+}
+
+.steward-field {
+  display: grid;
+  gap: 6px;
+}
+
+.steward-field span {
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.steward-field input {
+  height: 40px;
+  border: 1px solid #d8e3f3;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 14px;
+  color: #0f172a;
+  background: #ffffff;
+}
+
+.steward-field input:focus {
+  outline: none;
+  border-color: #3b68c4;
+  box-shadow: 0 0 0 3px rgba(59, 104, 196, 0.15);
+}
+
+.steward-form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.steward-upload-preview {
+  border: 1px solid #d8e3f3;
+  background: #f9fbff;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.steward-upload-name {
+  margin: 0;
+  font-size: 13px;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.steward-upload-url {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.steward-inline-error,
+.steward-inline-success {
+  margin: 0 0 10px;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.steward-inline-error {
+  color: #a53939;
+  background: #fff1f1;
+  border: 1px solid #e9c6c6;
+}
+
+.steward-inline-success {
+  color: #1f7a3f;
+  background: #ecfbf2;
+  border: 1px solid #cdeed9;
+}
+
+.steward-static-row {
+  cursor: default;
+}
+
+.steward-static-row:hover {
+  border-color: #edf2f7;
+  background: #ffffff;
+}
+
+.steward-category-link {
+  font-size: 12px;
+  font-weight: 700;
+  color: #2d5a8f;
+  text-decoration: none;
+}
+
+.steward-category-link:hover {
+  text-decoration: underline;
 }
 
 .steward-grid {
@@ -292,6 +802,28 @@
   padding: 16px;
 }
 
+.steward-modal-image-wrap {
+  width: 100%;
+  height: 180px;
+  border: 1px solid #d8e3f3;
+  border-radius: 10px;
+  background: #eef4ff;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.steward-modal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.steward-modal-image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #edf2f7 0%, #dbe4ee 100%);
+}
+
 .steward-close {
   border: 1px solid #dbe4ee;
   background: #ffffff;
@@ -314,24 +846,45 @@
 }
 
 .steward-btn {
-  border-radius: 8px;
-  height: 34px;
-  padding: 0 12px;
-  font-size: 12px;
+  border-radius: 7px;
+  height: 30px;
+  padding: 0 10px;
+  font-size: 11px;
   font-weight: 700;
   cursor: pointer;
 }
 
 .steward-btn.reject {
-  border: 1px solid #e9c6c6;
-  background: #fff5f5;
-  color: #a53939;
+  border: 1px solid #c8d7f1;
+  background: #eef4ff;
+  color: #1f3454;
 }
 
 .steward-btn.approve {
   border: 0;
   background: #3b68c4;
   color: #ffffff;
+}
+
+.steward-btn.approve:hover {
+  background: #3158aa;
+}
+
+.steward-btn.reject:hover {
+  background: #dfe9fb;
+  border-color: #adc3eb;
+}
+
+.steward-btn.edit {
+  border: 1px solid #c8d7f1;
+  background: #eef4ff;
+  color: #1f3454;
+  height: 30px;
+  font-size: 11px;
+}
+
+.steward-create-toggle {
+  min-width: 160px;
 }
 
 @media (max-width: 1060px) {
@@ -352,5 +905,35 @@
   .steward-summary,
   .steward-grid {
     grid-template-columns: 1fr;
+  }
+
+  .steward-overview-grid,
+  .steward-status-legend {
+    grid-template-columns: 1fr;
+  }
+
+  .steward-mini-row {
+    grid-template-columns: minmax(80px, 1fr) auto;
+  }
+
+  .steward-categories {
+    grid-template-columns: 1fr;
+  }
+
+  .steward-filters-row {
+    flex-direction: column;
+  }
+
+  .steward-filter-item {
+    width: 100%;
+  }
+
+  .steward-products-table th,
+  .steward-products-table td {
+    padding: 8px;
+  }
+
+  .steward-table-pagination {
+    flex-wrap: wrap;
   }
 }

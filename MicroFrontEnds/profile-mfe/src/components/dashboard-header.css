@@ -71,6 +71,27 @@
   border-color: #c8d7f1;
 }
 
+.dashboard-profile-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: right;
+}
+
+.dashboard-profile-name {
+  margin: 0;
+  font-size: 13px;
+  color: #1f3454;
+  font-weight: 700;
+}
+
+.dashboard-profile-role {
+  margin: 0;
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+}
+
 @media (max-width: 760px) {
   .dashboard-header-inner {
     padding: 10px 14px;
